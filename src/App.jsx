@@ -1064,7 +1064,7 @@ export default function App(){
 
   // ── NAME SCREEN ──
   if(screen==="name")return(
-    <div style={{maxWidth:420,margin:"0 auto",padding:"2rem 1rem",animation:"su 0.5s ease"}}>
+    <div style={{maxWidth:480,margin:"0 auto",padding:"2rem 1rem",animation:"su 0.5s ease"}}>
       <div style={{textAlign:"center",marginBottom:"1.5rem"}}>
         <div style={{fontSize:52,animation:"pf 2s ease-in-out infinite"}}>🏆</div>
         <h1 style={{fontSize:22,fontWeight:700,margin:"8px 0 4px"}}>FIFA World Cup 2026</h1>
@@ -1089,7 +1089,7 @@ export default function App(){
 
   // ── HUB ──
   if(screen==="hub"||screen==="scores"||screen==="leaderboard")return(
-    <div style={{maxWidth:520,margin:"0 auto",padding:"0.75rem",animation:"su 0.4s ease"}}>
+    <div style={{width:"100%",padding:"0.75rem",animation:"su 0.4s ease",boxSizing:"border-box"}}>
       {showWallet&&<WalletModal balance={balance} username={username} onClose={()=>setShowWallet(false)} onTopUp={(c,perk)=>{setBalance(b=>b+c);if(perk)setAdPerk(perk);}}/>}
       {selectedPlayer&&<PlayerDetailModal player={selectedPlayer} scores={scores} onClose={()=>setSelectedPlayer(null)}/>}
       {transferTeamIdx!==null&&teams[transferTeamIdx]?.submitted&&<TransferModal team={teams[transferTeamIdx]} scores={scores} onSave={(sq,cap)=>handleTransferSave(transferTeamIdx,sq,cap)} onClose={()=>setTransferTeamIdx(null)}/>}
@@ -1233,7 +1233,7 @@ export default function App(){
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
             <div style={{display:"flex",alignItems:"center",gap:6}}>
               <span style={{fontSize:11,padding:"2px 8px",borderRadius:4,fontWeight:600,background:scoreSource==="live"?"rgba(39,174,96,0.15)":scoreSource==="error"?"rgba(231,76,60,0.15)":"rgba(255,193,7,0.15)",color:scoreSource==="live"?"#27ae60":scoreSource==="error"?"#e74c3c":"#f39c12"}}>
-                {scoreSource==="live"?"🟢 Live":"scoreSource"==="error"?"🔴 API error — mock mode":"🟡 Mock mode"}
+                {scoreSource==="live"?"🟢 Live":scoreSource==="error"?"🔴 API error — mock mode":"🟡 Mock mode"}
               </span>
               {lastUpdated&&<span style={{fontSize:10,color:"var(--color-text-tertiary)"}}>Updated {lastUpdated.toLocaleTimeString()}</span>}
             </div>
@@ -1247,10 +1247,29 @@ export default function App(){
           </div>
           {/* ── IN-FEED AD — top of scores, hidden for paying users ── */}
           <AdBanner slot="feed" adPerk={adPerk}/>
-          {FIXTURES.filter(f=>groupFilter==="All"||f.group===groupFilter).map((f,fi)=>(
-            <div key={f.id}>
-            {(()=>{const sc=scores[f.id];const live=sc&&sc.status==="LIVE";return(<>
-            return(
+          {FIXTURES.filter(f=>groupFilter==="All"||f.group===groupFilter).map((f,fi)=>{
+  const sc=scores[f.id];
+  const live=sc&&sc.status==="LIVE";
+  return(
+    <div key={f.id}>
+      <div style={{background:"var(--color-background-primary)",border:`1px solid ${live?"#4caf50":"var(--color-border-tertiary)"}`,borderRadius:12,padding:"10px 12px",marginBottom:6}}>
+        <div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}>
+          <span style={{fontSize:11,color:"var(--color-text-tertiary)"}}>Grp {f.group} · {f.date}</span>
+          {live?<span style={{fontSize:11,fontWeight:700,color:"#2e7d32",background:"var(--color-background-success)",padding:"1px 7px",borderRadius:4}}>🔴 {sc.minute?`${sc.minute}'`:"LIVE"}</span>:sc?.status==="FT"?<span style={{fontSize:11,background:"var(--color-background-secondary)",padding:"1px 7px",borderRadius:4}}>FT</span>:<span style={{fontSize:11,color:"var(--color-text-tertiary)"}}>Upcoming</span>}
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 56px 1fr",alignItems:"center",gap:4}}>
+          <div style={{display:"flex",alignItems:"center",gap:4,justifyContent:"flex-end"}}><span style={{fontSize:12,fontWeight:500,textAlign:"right"}}>{f.home}</span><AnimFlag country={f.home} size={16}/></div>
+          <div style={{textAlign:"center",fontWeight:800,fontSize:20,color:live?"#2e7d32":"var(--color-text-primary)"}}>{sc&&sc.status!=="NS"?`${sc.homeScore}–${sc.awayScore}`:"vs"}</div>
+          <div style={{display:"flex",alignItems:"center",gap:4}}><AnimFlag country={f.away} size={16}/><span style={{fontSize:12,fontWeight:500}}>{f.away}</span></div>
+        </div>
+        <div style={{marginTop:6,fontSize:11,color:"var(--color-text-secondary)",borderTop:"0.5px solid var(--color-border-tertiary)",paddingTop:5}}>
+          {generateCommentary(f,sc).map((c,i)=><div key={i}>{c}</div>)}
+        </div>
+      </div>
+      {(fi+1)%4===0&&<AdBanner slot="feed" adPerk={adPerk}/>}
+    </div>
+  );
+})}
               <div key={f.id} style={{background:"var(--color-background-primary)",border:`1px solid ${live?"#4caf50":"var(--color-border-tertiary)"}`,borderRadius:12,padding:"10px 12px",marginBottom:6}}>
                 <div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}>
                   <span style={{fontSize:11,color:"var(--color-text-tertiary)"}}>Grp {f.group} · {f.date}</span>
@@ -1293,7 +1312,7 @@ export default function App(){
 
   // ── PICK SCREEN ──
   if(screen==="pick")return(
-    <div style={{maxWidth:600,margin:"0 auto",padding:"0.5rem",animation:"su 0.3s ease"}}>
+    <div style={{width:"100%",padding:"0.5rem",animation:"su 0.3s ease",boxSizing:"border-box"}}>
       {showWallet&&<WalletModal balance={balance} username={username} onClose={()=>setShowWallet(false)} onTopUp={c=>setBalance(b=>b+c)}/>}
       {selectedPlayer&&<PlayerDetailModal player={selectedPlayer} scores={scores} onClose={()=>setSelectedPlayer(null)}/>}
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
