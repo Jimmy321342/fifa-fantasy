@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 // ── CONFIG ────────────────────────────────────────────────────
 // Get your FREE key at https://www.football-data.org/client/register
 // Free tier: 10 req/min, covers World Cup (competition code: WC)
-const FOOTBALL_DATA_API_KEY = "YOUR_API_KEY_HERE";
+const FOOTBALL_DATA_API_KEY = "a99aea4482094b73a3f77ebb33f212a1";
 
 // ── ADSENSE CONFIG ────────────────────────────────────────────
 // Replace with your real AdSense publisher ID and slot IDs
@@ -15,7 +15,7 @@ const AD_SLOTS = {
   sidebar: "3333333333", // after team submission
 };
 const WC_COMPETITION_ID = 2000; // FIFA World Cup on football-data.org
-const USE_LIVE_SCORES = FOOTBALL_DATA_API_KEY !== "YOUR_API_KEY_HERE";
+const USE_LIVE_SCORES = FOOTBALL_DATA_API_KEY !== "a99aea4482094b73a3f77ebb33f212a1";
 const POLL_INTERVAL_MS = 60000; // 60s — respects free tier rate limit
 
 const TEAM_BUDGET = 100;
